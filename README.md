@@ -23,17 +23,21 @@ The workflow operates in three gated stages, separated by rigid folder structure
 
     STAGE 1                      GATE             STAGE 2                    STAGE 3
     1_raw_data/*.pdf             ENGINEER         3_spec/spec.md             4_model/*.slx
-      → [extraction prompt] →    SIGN-OFF    →    → [generation prompt] →    → [docs generation] →
+      → [extraction skill] →     SIGN-OFF    →    → [generation skill] →     → [docs generation] →
     3_spec/spec.md               (human!)         4_model/ (.slx + .m)       5_docs/architecture.md
 
-### Folder Layout
-| Folder | Contents | Rules |
+### Repository Layout
+
+The harness separates **generic procedure** (`/skills`, shared by all examples) from **product-specific data and config** (one folder per example under `/examples`):
+
+| Location | Contents | Rules |
 |---|---|---|
-| `1_raw_data/` | Raw supplier PDFs (datasheets, test reports). | Read-only during Stage 1. |
-| `2_prompts/` | Pipeline runbook & prompt artifacts (the "Harness"). | Version-controlled, encodes team standards. |
-| `3_spec/` | `spec.md` (Stage 1 Output). | **Single Source of Truth.** Needs human sign-off. |
-| `4_model/` | `.slx` and `_params.m` files (Stage 2 Output). | Draft Simulink model. Parameters map 1:1 to `spec.md`. |
-| `5_docs/` | `_architecture.md` (Stage 3 Output). | Auto-generated from the *actual built model*, not intentions. |
+| `skills/` | Pipeline runbook + extraction & generation skills (the "Harness"). | Generic, product-agnostic. Version-controlled, encodes team standards. |
+| `examples/<product>/1_raw_data/` | Raw supplier PDFs (datasheets, test reports). | Read-only during Stage 1. |
+| `examples/<product>/2_config/` | `pipeline_config.md` — model family, topology, output names. | The only product-specific parameterization of the skills. |
+| `examples/<product>/3_spec/` | `spec.md` (Stage 1 Output). | **Single Source of Truth.** Needs human sign-off. |
+| `examples/<product>/4_model/` | `.slx` and `_params.m` files (Stage 2 Output). | Draft Simulink model. Parameters map 1:1 to `spec.md`. |
+| `examples/<product>/5_docs/` | `_architecture.md` (Stage 3 Output). | Auto-generated from the *actual built model*, not intentions. |
 
 ---
 
@@ -51,7 +55,7 @@ This repository contains a fully verified run of the pipeline, creating a **pack
 
 If you have MATLAB and Simulink installed, you can inspect and run the generated artifacts directly:
 
-    cd 4_model
+    cd examples/molicel_48v_pack/4_model
     molicel_48v_pack_params           % Load the spec-traceable parameters into the workspace
     open_system('molicel_48v_pack')   % Open the AI-generated model draft
     sim('molicel_48v_pack');          % Run 18 A (1C) discharge scenario
@@ -62,8 +66,8 @@ If you have MATLAB and Simulink installed, you can inspect and run the generated
 
 ## Requirements & Tech Stack
 
-* **MATLAB / Simulink** (Tested on R2023b+)
-* **Agentic IDE or CLI:** VS Code with an AI agent (e.g., Claude Code, GitHub Copilot) configured with the **MATLAB Model Context Protocol (MCP)** server to allow the AI to execute MATLAB commands and build models interactively.
+* **MATLAB / Simulink** (built and tested on R2026a; the MATLAB agentic toolkit / MCP server requires a recent release)
+* **Agentic IDE or CLI:** VS Code with an AI agent (e.g., Claude Code, GitHub Copilot) configured with the **MATLAB Model Context Protocol (MCP)** server to allow the AI to execute MATLAB commands and build models interactively. Running the already-generated artifacts requires only MATLAB/Simulink — no AI tooling.
 
 ---
 *Disclaimer: The artifacts in this repository are for demonstration purposes. The generated models are drafts pending human engineering validation.*
