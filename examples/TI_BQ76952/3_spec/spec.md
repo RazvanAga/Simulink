@@ -96,5 +96,5 @@ The state machine architecture must accommodate a secondary latching loop withou
 
 ---
 
-    VALIDATED BY: ____________  DATE: ________
+    VALIDATED BY: Razvan Aga  DATE: 11.06.2026
     Model generation MUST NOT proceed before sign-off.
