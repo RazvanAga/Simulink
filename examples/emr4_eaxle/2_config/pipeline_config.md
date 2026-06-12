@@ -48,5 +48,9 @@ Outputs:      v_veh, n_motor (rpm), T_axle, P_dc, I_dc, Overspeed_Flag, OC_Flag
 
 ## Status of this run
 
-Stage 1 (spec extraction) executed; `3_spec/spec.md` awaiting engineer sign-off.
-Stages 2–3 not started.
+- Stage 1 executed; `3_spec/spec.md` **signed off** (Razvan Aga, 11.06.2026).
+- Stage 2 executed: `4_model/emr4_eaxle.slx` + `_params.m` built; simulated; all §7
+  acceptance criteria **PASS** (cut at 21.97 s / 50.38 m/s; 0–100 km/h in 8.46 s).
+- Stage 3 executed: `5_docs/emr4_eaxle_architecture.md` generated from the built model
+  and measured results. Held-back §8 validation (Entry/Enhanced re-parameterization)
+  remains the engineer's pending step.
